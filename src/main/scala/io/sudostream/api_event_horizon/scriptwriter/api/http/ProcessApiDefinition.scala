@@ -16,7 +16,8 @@ import io.sudostream.api_event_horizon.scriptwriter.business.ProcessSwaggerFileA
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
-trait ProcessApiDefinition extends Health {
+trait ProcessApiDefinition extends Health
+  with io.sudostream.api_event_horizon.scriptwriter.api.kafka.ProcessApiDefinition {
 
   implicit def executor: ExecutionContextExecutor
 
@@ -28,6 +29,7 @@ trait ProcessApiDefinition extends Health {
     (post & entity(as[Multipart.FormData])) { fileData =>
       complete {
         processFile(fileData).map { testsGenerated =>
+          publishSingleEventToKafka(testsGenerated)
           HttpResponse(StatusCodes.OK, entity = "\n" + testsGenerated + "\n\n")
         }.recover {
           case ex: Exception =>
