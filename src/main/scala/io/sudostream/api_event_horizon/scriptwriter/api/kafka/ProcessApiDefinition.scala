@@ -43,7 +43,7 @@ trait ProcessApiDefinition {
       .runWith(Producer.commitableSink(producerSettings))
   }
 
-  def publishSingleEventToKafka(generatedTestsEvent: GeneratedTestsEvent) = {
+  def publishSingleEventToKafka(generatedTestsEvent: GeneratedTestsEvent) : Future[Done] = {
 
     val done = Source.single(generatedTestsEvent)
       .map { msg =>
