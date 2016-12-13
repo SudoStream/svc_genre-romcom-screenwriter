@@ -1,5 +1,5 @@
 package io.sudostream.api_event_horizon.scriptwriter.api.kafka
-//import akka.event.Logging
+import akka.event.Logging
 import akka.Done
 import akka.actor.ActorSystem
 import akka.kafka.scaladsl.{Consumer, Producer}
