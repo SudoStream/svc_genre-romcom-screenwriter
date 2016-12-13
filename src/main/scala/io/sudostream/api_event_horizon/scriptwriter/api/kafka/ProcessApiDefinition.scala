@@ -1,5 +1,5 @@
 package io.sudostream.api_event_horizon.scriptwriter.api.kafka
-import akka.event.Logging
+//import akka.event.Logging
 import akka.Done
 import akka.actor.ActorSystem
 import akka.kafka.scaladsl.{Consumer, Producer}
@@ -25,7 +25,7 @@ trait ProcessApiDefinition {
 
   def producerSettings: ProducerSettings[Array[Byte], GeneratedTestsEvent]
 
-  val log = Logging(new EventStream(false), this)
+  def logger : Logging
 
   def publishStuffToKafka(): Future[Done] = {
     Consumer.committableSource(consumerSettings, Subscriptions.topics("aeh-api-definitions"))
@@ -43,8 +43,8 @@ trait ProcessApiDefinition {
   }
 
   def publishSingleEventToKafka(generatedTestsEvent: GeneratedTestsEvent) = {
-    log.info("Sent message to Kafka")
-    log.debug("Message sent:- " + generatedTestsEvent)
+    logger.info("Sent message to Kafka")
+    logger.debug("Message sent:- " + generatedTestsEvent)
     Source.single(generatedTestsEvent)
       .map { msg =>
         new ProducerRecord[Array[Byte], GeneratedTestsEvent]("generated-test-scripts", msg)
