@@ -43,7 +43,7 @@ trait ProcessApiDefinition {
       .runWith(Producer.commitableSink(producerSettings))
   }
 
-  def publishSingleEventToKafka(generatedTestsEvent: GeneratedTestsEvent) : Future[Done] = {
+  def publishSingleEventToKafka(generatedTestsEvent: GeneratedTestsEvent): Future[Done] = {
 
     val done = Source.single(generatedTestsEvent)
       .map { msg =>
@@ -58,7 +58,9 @@ trait ProcessApiDefinition {
     }
 
     done.onFailure {
-      case e: Throwable => logger.error("Ooooh dear :- " + e.getMessage + "\n" + e.getStackTrace + "\n")
+      case e: Throwable =>
+        logger.error("Ooooh dear :- " + e.getMessage + "\n")
+        e.printStackTrace()
       case somethingElse => logger.error("Not sure what happened! " + somethingElse)
     }
 
