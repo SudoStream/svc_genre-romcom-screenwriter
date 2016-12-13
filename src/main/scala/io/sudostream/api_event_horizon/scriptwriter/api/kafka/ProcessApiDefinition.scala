@@ -1,13 +1,12 @@
 package io.sudostream.api_event_horizon.scriptwriter.api.kafka
 
-import akka.event.{Logging, LoggingAdapter}
 import akka.Done
 import akka.actor.ActorSystem
+import akka.event.LoggingAdapter
 import akka.kafka.scaladsl.{Consumer, Producer}
 import akka.kafka.{ConsumerSettings, ProducerMessage, ProducerSettings, Subscriptions}
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
-import akka.event.EventStream
 import io.sudostream.api_event_horizon.messages.GeneratedTestsEvent
 import io.sudostream.api_event_horizon.scram.api.SwaggerJsonScramConverter
 import org.apache.kafka.clients.producer.ProducerRecord
@@ -17,6 +16,7 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 trait ProcessApiDefinition {
 
   implicit def executor: ExecutionContextExecutor
+
   implicit val system: ActorSystem
   implicit val materializer: Materializer
 
@@ -26,7 +26,7 @@ trait ProcessApiDefinition {
 
   def producerSettings: ProducerSettings[Array[Byte], GeneratedTestsEvent]
 
-  def logger : LoggingAdapter
+  def logger: LoggingAdapter
 
   def publishStuffToKafka(): Future[Done] = {
     Consumer.committableSource(consumerSettings, Subscriptions.topics("aeh-api-definitions"))
@@ -44,13 +44,13 @@ trait ProcessApiDefinition {
   }
 
   def publishSingleEventToKafka(generatedTestsEvent: GeneratedTestsEvent) = {
-    
+
     val done = Source.single(generatedTestsEvent)
       .map { msg =>
         new ProducerRecord[Array[Byte], GeneratedTestsEvent]("generated-test-scripts", msg)
       }
       .runWith(Producer.plainSink(producerSettings))
-    logger.info("Message on its way to Kafka")
+    logger.info("Message on its way to Kafka : " + producerSettings)
     logger.debug("Message sent:- " + generatedTestsEvent)
 
     done
