@@ -15,7 +15,6 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 trait ProcessApiDefinition {
 
   implicit def executor: ExecutionContextExecutor
-  val log = Logging(context.system, this)
   implicit val system: ActorSystem
   implicit val materializer: Materializer
 
@@ -24,6 +23,8 @@ trait ProcessApiDefinition {
   def consumerSettings: ConsumerSettings[Array[Byte], String]
 
   def producerSettings: ProducerSettings[Array[Byte], GeneratedTestsEvent]
+
+  val log = Logging(context.system, this)
 
   def publishStuffToKafka(): Future[Done] = {
     Consumer.committableSource(consumerSettings, Subscriptions.topics("aeh-api-definitions"))
