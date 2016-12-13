@@ -24,7 +24,7 @@ trait ProcessApiDefinition {
 
   def producerSettings: ProducerSettings[Array[Byte], GeneratedTestsEvent]
 
-  val log = Logging(context.system, this)
+  val log = Logging(system, this)
 
   def publishStuffToKafka(): Future[Done] = {
     Consumer.committableSource(consumerSettings, Subscriptions.topics("aeh-api-definitions"))
