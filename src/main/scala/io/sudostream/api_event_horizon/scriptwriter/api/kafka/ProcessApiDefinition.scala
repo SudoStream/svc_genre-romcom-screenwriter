@@ -53,6 +53,15 @@ trait ProcessApiDefinition {
     logger.info("Message on its way to Kafka : " + producerSettings)
     logger.debug("Message sent:- " + generatedTestsEvent)
 
+    done.onSuccess {
+      case whoKnows => logger.info("All goood :" + whoKnows)
+    }
+
+    done.onFailure {
+      case e: Throwable => logger.error("Ooooh dear :- " + e.getMessage + "\n" + e + "\n")
+      case somethingElse => logger.error("Not sure what happened! " + somethingElse)
+    }
+
     done
   }
 
