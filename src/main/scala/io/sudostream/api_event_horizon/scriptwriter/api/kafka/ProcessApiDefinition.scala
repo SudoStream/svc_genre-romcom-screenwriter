@@ -6,6 +6,7 @@ import akka.kafka.scaladsl.{Consumer, Producer}
 import akka.kafka.{ConsumerSettings, ProducerMessage, ProducerSettings, Subscriptions}
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
+import akka.event.EventStream
 import io.sudostream.api_event_horizon.messages.GeneratedTestsEvent
 import io.sudostream.api_event_horizon.scram.api.SwaggerJsonScramConverter
 import org.apache.kafka.clients.producer.ProducerRecord
@@ -24,7 +25,7 @@ trait ProcessApiDefinition {
 
   def producerSettings: ProducerSettings[Array[Byte], GeneratedTestsEvent]
 
-  val log = Logging(system, this)
+  val log = Logging(new EventStream(false), this)
 
   def publishStuffToKafka(): Future[Done] = {
     Consumer.committableSource(consumerSettings, Subscriptions.topics("aeh-api-definitions"))
