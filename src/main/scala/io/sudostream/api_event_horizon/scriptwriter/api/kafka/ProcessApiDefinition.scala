@@ -50,7 +50,7 @@ trait ProcessApiDefinition {
         new ProducerRecord[Array[Byte], GeneratedTestsEvent]("generated-test-scripts", msg)
       }
       .runWith(Producer.plainSink(producerSettings))
-    logger.info("Message on its way to Kafka : " + producerSettings)
+    logger.info("Message on its way to Kafka")
     logger.debug("Message sent:- " + generatedTestsEvent)
 
     done.onSuccess {
@@ -58,7 +58,7 @@ trait ProcessApiDefinition {
     }
 
     done.onFailure {
-      case e: Throwable => logger.error("Ooooh dear :- " + e.getMessage + "\n" + e + "\n")
+      case e: Throwable => logger.error("Ooooh dear :- " + e.getMessage + "\n" + e.getStackTrace + "\n")
       case somethingElse => logger.error("Not sure what happened! " + somethingElse)
     }
 
