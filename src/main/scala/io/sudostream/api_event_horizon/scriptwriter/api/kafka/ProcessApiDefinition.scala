@@ -1,5 +1,6 @@
 package io.sudostream.api_event_horizon.scriptwriter.api.kafka
-import akka.event.Logging
+
+import akka.event.{Logging, LoggingAdapter}
 import akka.Done
 import akka.actor.ActorSystem
 import akka.kafka.scaladsl.{Consumer, Producer}
@@ -25,7 +26,7 @@ trait ProcessApiDefinition {
 
   def producerSettings: ProducerSettings[Array[Byte], GeneratedTestsEvent]
 
-  def logger : Logging
+  def logger : LoggingAdapter
 
   def publishStuffToKafka(): Future[Done] = {
     Consumer.committableSource(consumerSettings, Subscriptions.topics("aeh-api-definitions"))
