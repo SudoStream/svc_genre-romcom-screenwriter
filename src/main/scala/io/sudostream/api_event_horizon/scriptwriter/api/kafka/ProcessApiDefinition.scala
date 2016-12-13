@@ -44,14 +44,16 @@ trait ProcessApiDefinition {
   }
 
   def publishSingleEventToKafka(generatedTestsEvent: GeneratedTestsEvent) = {
-    logger.info("Sent message to Kafka")
-    logger.debug("Message sent:- " + generatedTestsEvent)
-    Source.single(generatedTestsEvent)
+    
+    val done = Source.single(generatedTestsEvent)
       .map { msg =>
         new ProducerRecord[Array[Byte], GeneratedTestsEvent]("generated-test-scripts", msg)
       }
       .runWith(Producer.plainSink(producerSettings))
-     
+    logger.info("Message on its way to Kafka")
+    logger.debug("Message sent:- " + generatedTestsEvent)
+
+    done
   }
 
 }
