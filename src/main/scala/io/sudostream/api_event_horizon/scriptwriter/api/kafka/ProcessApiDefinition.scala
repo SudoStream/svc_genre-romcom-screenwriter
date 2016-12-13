@@ -1,5 +1,5 @@
 package io.sudostream.api_event_horizon.scriptwriter.api.kafka
-
+import akka.event.Logging
 import akka.Done
 import akka.actor.ActorSystem
 import akka.kafka.scaladsl.{Consumer, Producer}
@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 trait ProcessApiDefinition {
 
   implicit def executor: ExecutionContextExecutor
-
+  val log = Logging(context.system, this)
   implicit val system: ActorSystem
   implicit val materializer: Materializer
 
@@ -46,6 +46,8 @@ trait ProcessApiDefinition {
         new ProducerRecord[Array[Byte], GeneratedTestsEvent]("generated-test-scripts", msg)
       }
       .runWith(Producer.plainSink(producerSettings))
+      log.info("Sent message to Kafka")
+      log.debug("Message sent:- " + generatedTestsEvent)
   }
 
 }
