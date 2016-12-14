@@ -30,7 +30,7 @@ object ScriptWriter extends App with Service
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
 
   override val producerSettings = ProducerSettings(system, new ByteArraySerializer, new GeneratedTestsEventSerializer)
-      .withBootstrapServers("localhost:9092")
+    .withBootstrapServers(kafkaBootServers)
 
   publishStuffToKafka()
 
