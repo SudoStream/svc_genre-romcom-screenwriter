@@ -1,5 +1,7 @@
 package io.sudostream.api_event_horizon.scriptwriter.api.kafka
 
+import java.io.{PrintWriter, StringWriter}
+
 import akka.Done
 import akka.actor.ActorSystem
 import akka.event.LoggingAdapter
@@ -60,7 +62,9 @@ trait ProcessApiDefinition {
     done.onFailure {
       case e: Throwable =>
         logger.error("Ooooh dear :- " + e.getMessage + "\n")
-        e.printStackTrace()
+        val sw = new StringWriter
+        e.printStackTrace(new PrintWriter(sw))
+        logger.error(sw.toString)
       case somethingElse => logger.error("Not sure what happened! " + somethingElse)
     }
 
