@@ -22,7 +22,8 @@ trait ProcessApiDefinition {
   implicit val system: ActorSystem
   implicit val materializer: Materializer
 
-  def kafkaBootServers: String
+  def kafkaConsumerBootServers: String
+  def kafkaProducerBootServers: String
 
   def consumerSettings: ConsumerSettings[Array[Byte], String]
 
