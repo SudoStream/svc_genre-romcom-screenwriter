@@ -37,7 +37,7 @@ trait ProcessApiDefinition {
           val generatedTestsEvent = new SwaggerJsonScramConverter().convertToScram(msg.record.value()).get.generateHappyPathTests
 
           val msgToCommit = ProducerMessage.Message(
-            new ProducerRecord[Array[Byte], GeneratedTestsEvent]("generated-test-scripts", generatedTestsEvent),
+            new ProducerRecord[Array[Byte], GeneratedTestsEvent]("generated-test-script", generatedTestsEvent),
             msg.committableOffset)
           println("generated tests: " + generatedTestsEvent)
           msgToCommit
@@ -49,7 +49,7 @@ trait ProcessApiDefinition {
 
     val done = Source.single(generatedTestsEvent)
       .map { msg =>
-        new ProducerRecord[Array[Byte], GeneratedTestsEvent]("generated-test-scripts", msg)
+        new ProducerRecord[Array[Byte], GeneratedTestsEvent]("generated-test-script", msg)
       }
       .runWith(Producer.plainSink(producerSettings))
     logger.info("Message on its way to Kafka")
