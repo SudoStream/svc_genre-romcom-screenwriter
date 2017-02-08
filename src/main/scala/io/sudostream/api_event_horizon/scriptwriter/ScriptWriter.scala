@@ -36,7 +36,7 @@ object ScriptWriter extends App with Service
     .withBootstrapServers(kafkaProducerBootServers)
     .withParallelism(config.getInt("akka.kafka.producer.parallelism"))
     .withDispatcher(config.getString("akka.kafka.producer.use-dispatcher"))
-    .withProperty(ProducerConfig.ACKS_CONFIG, "0")
+    .withProperty(ProducerConfig.ACKS_CONFIG, config.getString("akka.kafka.producer.acks"))
 
   publishStuffToKafka()
 
