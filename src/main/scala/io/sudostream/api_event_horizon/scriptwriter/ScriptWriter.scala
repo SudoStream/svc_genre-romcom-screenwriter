@@ -31,10 +31,11 @@ object ScriptWriter extends App with Service
     .withGroupId("akka.kafka.consumer.groupid")
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
 
+  // TODO: Make acks config configurable
   override val producerSettings = ProducerSettings(system, new ByteArraySerializer, new GeneratedTestsEventSerializer)
     .withBootstrapServers(kafkaProducerBootServers)
     .withProperty(ProducerConfig.ACKS_CONFIG, "0")
-  // TODO: Make acks config configurable
+
 
   publishStuffToKafka()
 
