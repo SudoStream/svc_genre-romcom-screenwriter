@@ -28,7 +28,7 @@ object ScriptWriter extends App with Service
 
   override val consumerSettings = ConsumerSettings(system, new ByteArrayDeserializer, new StringDeserializer)
     .withBootstrapServers(kafkaConsumerBootServers)
-    .withGroupId("akka.kafka.consumer.groupid")
+    .withGroupId(config.getString("akka.kafka.consumer.groupid"))
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
 
   // TODO: Make acks config configurable
