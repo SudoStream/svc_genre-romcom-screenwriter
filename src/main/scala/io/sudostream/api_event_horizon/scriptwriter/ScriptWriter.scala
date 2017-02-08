@@ -34,7 +34,7 @@ object ScriptWriter extends App with Service
   // TODO: Make acks config configurable
   override val producerSettings = ProducerSettings(system, new ByteArraySerializer, new GeneratedTestsEventSerializer)
     .withBootstrapServers(kafkaProducerBootServers)
-    .withProperty(ProducerConfig.ACKS_CONFIG, "1")
+    .withProperty(ProducerConfig.ACKS_CONFIG, "0")
 
 
   publishStuffToKafka()
