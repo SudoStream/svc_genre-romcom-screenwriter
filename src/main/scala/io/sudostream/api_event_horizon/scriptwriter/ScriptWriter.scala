@@ -8,6 +8,7 @@ import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.{Config, ConfigFactory}
 import io.sudostream.api_event_horizon.kafka.serialising.GeneratedTestsEventSerializer
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, StringDeserializer}
 
 import scala.concurrent.ExecutionContextExecutor
@@ -32,6 +33,8 @@ object ScriptWriter extends App with Service
 
   override val producerSettings = ProducerSettings(system, new ByteArraySerializer, new GeneratedTestsEventSerializer)
     .withBootstrapServers(kafkaProducerBootServers)
+    .withProperty(ProducerConfig.ACKS_CONFIG, "0")
+  // TODO: Make acks config configurable
 
   publishStuffToKafka()
 
