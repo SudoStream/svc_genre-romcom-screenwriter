@@ -37,6 +37,7 @@ object ScriptWriter extends App with Service
     .withParallelism(config.getInt("akka.kafka.producer.parallelism"))
     .withDispatcher(config.getString("akka.kafka.producer.use-dispatcher"))
     .withProperty(ProducerConfig.ACKS_CONFIG, config.getString("akka.kafka.producer.acks"))
+    .withProperty(ProducerConfig.BATCH_SIZE_CONFIG, config.getString("akka.kafka.producer.batch-size"))
 
   publishStuffToKafka()
 
