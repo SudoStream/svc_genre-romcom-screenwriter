@@ -28,16 +28,11 @@ object ScriptWriter extends App with Service
 
   override val consumerSettings = ConsumerSettings(system, new ByteArrayDeserializer, new StringDeserializer)
     .withBootstrapServers(kafkaConsumerBootServers)
-    .withGroupId(config.getString("akka.kafka.consumer.groupid"))
+    .withGroupId("akka.kafka.consumer.groupid")
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
 
-  // TODO: Make acks config configurable
   override val producerSettings = ProducerSettings(system, new ByteArraySerializer, new GeneratedTestsEventSerializer)
     .withBootstrapServers(kafkaProducerBootServers)
-//    .withParallelism(config.getInt("akka.kafka.producer.parallelism"))
-//    .withDispatcher(config.getString("akka.kafka.producer.use-dispatcher"))
-//    .withProperty(ProducerConfig.ACKS_CONFIG, config.getString("akka.kafka.producer.acks"))
-//    .withProperty(ProducerConfig.BATCH_SIZE_CONFIG, config.getString("akka.kafka.producer.batch-size"))
 
   publishStuffToKafka()
 
