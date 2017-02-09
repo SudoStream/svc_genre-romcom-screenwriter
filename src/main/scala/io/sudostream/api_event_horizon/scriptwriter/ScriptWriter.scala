@@ -8,7 +8,6 @@ import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.{Config, ConfigFactory}
 import io.sudostream.api_event_horizon.kafka.serialising.GeneratedTestsEventSerializer
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, StringDeserializer}
 
 import scala.concurrent.ExecutionContextExecutor
@@ -28,7 +27,7 @@ object ScriptWriter extends App with Service
 
   override val consumerSettings = ConsumerSettings(system, new ByteArrayDeserializer, new StringDeserializer)
     .withBootstrapServers(kafkaConsumerBootServers)
-    .withGroupId("akka.kafka.consumer.groupid")
+    .withGroupId(config.getString("akka.kafka.consumer.groupid"))
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
 
   override val producerSettings = ProducerSettings(system, new ByteArraySerializer, new GeneratedTestsEventSerializer)
