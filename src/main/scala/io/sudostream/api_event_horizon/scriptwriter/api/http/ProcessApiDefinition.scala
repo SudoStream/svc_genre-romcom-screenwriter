@@ -10,7 +10,7 @@ import akka.pattern.ask
 import akka.stream.Materializer
 import akka.stream.scaladsl.StreamConverters
 import akka.util.Timeout
-import io.sudostream.api_event_horizon.messages.SpeculativeScreenPlay
+import io.sudostream.api_event_horizon.messages.SpeculativeScreenplay
 import io.sudostream.api_event_horizon.scriptwriter.business.ProcessSwaggerFileActor
 
 import scala.concurrent.duration._
@@ -42,7 +42,7 @@ trait ProcessApiDefinition extends Health
     }
   } ~ health
 
-  private def processFile(fileData: Multipart.FormData): Future[SpeculativeScreenPlay] = {
+  private def processFile(fileData: Multipart.FormData): Future[SpeculativeScreenplay] = {
     val swaggerSpecActor: ActorRef = system.actorOf(Props[ProcessSwaggerFileActor])
 
     val swaggerDefinitionFuture: Future[String] = fileData.parts.mapAsync(1) { bodyPart ⇒
@@ -54,7 +54,7 @@ trait ProcessApiDefinition extends Health
     }.runFold("")(_ + _)
 
     swaggerDefinitionFuture flatMap {
-      swaggerDefinition => (swaggerSpecActor ? swaggerDefinition).asInstanceOf[Future[SpeculativeScreenPlay]]
+      swaggerDefinition => (swaggerSpecActor ? swaggerDefinition).asInstanceOf[Future[SpeculativeScreenplay]]
     }
   }
 

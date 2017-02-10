@@ -9,7 +9,7 @@ import akka.kafka.scaladsl.{Consumer, Producer}
 import akka.kafka.{ConsumerSettings, ProducerMessage, ProducerSettings, Subscriptions}
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
-import io.sudostream.api_event_horizon.messages.SpeculativeScreenPlay
+import io.sudostream.api_event_horizon.messages.SpeculativeScreenplay
 import io.sudostream.api_event_horizon.scram.api.SwaggerJsonScramConverter
 import org.apache.kafka.clients.producer.ProducerRecord
 
@@ -27,7 +27,7 @@ trait ProcessApiDefinition {
 
   def consumerSettings: ConsumerSettings[Array[Byte], String]
 
-  def producerSettings: ProducerSettings[Array[Byte], SpeculativeScreenPlay]
+  def producerSettings: ProducerSettings[Array[Byte], SpeculativeScreenplay]
 
   def logger: LoggingAdapter
 
@@ -38,7 +38,7 @@ trait ProcessApiDefinition {
           val generatedTestsEvent = new SwaggerJsonScramConverter().convertToScram(msg.record.value()).get.generateHappyPathTests
 
           val msgToCommit = ProducerMessage.Message(
-            new ProducerRecord[Array[Byte], SpeculativeScreenPlay]("generated-test-script", generatedTestsEvent),
+            new ProducerRecord[Array[Byte], SpeculativeScreenplay]("speculative-screenplays", generatedTestsEvent),
             msg.committableOffset)
           println("generated tests: " + generatedTestsEvent)
           msgToCommit
@@ -46,11 +46,11 @@ trait ProcessApiDefinition {
       .runWith(Producer.commitableSink(producerSettings))
   }
 
-  def publishSingleEventToKafka(generatedTestsEvent: SpeculativeScreenPlay): Future[Done] = {
+  def publishSingleEventToKafka(generatedTestsEvent: SpeculativeScreenplay): Future[Done] = {
 
     val done = Source.single(generatedTestsEvent)
       .map { msg =>
-        new ProducerRecord[Array[Byte], SpeculativeScreenPlay]("generated-test-script", msg)
+        new ProducerRecord[Array[Byte], SpeculativeScreenplay]("speculative-screenplays", msg)
       }
       .runWith(Producer.plainSink(producerSettings))
     logger.info("Message on its way to Kafka")
