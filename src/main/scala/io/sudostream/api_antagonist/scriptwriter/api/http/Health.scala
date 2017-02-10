@@ -1,4 +1,4 @@
-package io.sudostream.api_event_horizon.scriptwriter.api.http
+package io.sudostream.api_antagonist.scriptwriter.api.http
 
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._

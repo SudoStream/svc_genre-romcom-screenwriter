@@ -1,7 +1,7 @@
-package io.sudostream.api_event_horizon.scriptwriter.business
+package io.sudostream.api_antagonist.scriptwriter.business
 
 import akka.actor.Actor
-import io.sudostream.api_event_horizon.scram.api.SwaggerJsonApiToScreenplayWriterConverter
+import io.sudostream.api_antagonist.screenplay_guild.api.SwaggerJsonApiToScreenplayWriterConverter
 
 class ProcessSwaggerFileActor extends Actor {
 

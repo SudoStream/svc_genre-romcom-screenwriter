@@ -1,4 +1,4 @@
-package io.sudostream.api_event_horizon.scriptwriter.api.kafka
+package io.sudostream.api_antagonist.scriptwriter.api.kafka
 
 import java.io.{PrintWriter, StringWriter}
 
@@ -9,8 +9,8 @@ import akka.kafka.scaladsl.{Consumer, Producer}
 import akka.kafka.{ConsumerSettings, ProducerMessage, ProducerSettings, Subscriptions}
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
-import io.sudostream.api_event_horizon.messages.SpeculativeScreenplay
-import io.sudostream.api_event_horizon.scram.api.{ScreenplayWriterAmateur, SwaggerJsonApiToScreenplayWriterConverter}
+import io.sudostream.api_antagonist.messages.SpeculativeScreenplay
+import io.sudostream.api_antagonist.screenplay_guild.api.SwaggerJsonApiToScreenplayWriterConverter
 import org.apache.kafka.clients.producer.ProducerRecord
 
 import scala.concurrent.{ExecutionContextExecutor, Future}

@@ -1,4 +1,4 @@
-package io.sudostream.api_event_horizon.scriptwriter
+package io.sudostream.api_antagonist.scriptwriter
 
 import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
@@ -6,15 +6,17 @@ import akka.http.scaladsl.Http
 import akka.kafka.{ConsumerSettings, ProducerSettings}
 import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.{Config, ConfigFactory}
-import io.sudostream.api_event_horizon.kafka.serialising.SpeculativeScreenplaySerializer
+import io.sudostream.api_antagonist.kafka.serialising.SpeculativeScreenplaySerializer
+import io.sudostream.api_antagonist.scriptwriter.api.http.ProcessApiDefinition
+import io.sudostream.api_antagonist.scriptwriter.api.kafka
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, StringDeserializer}
 
 import scala.concurrent.ExecutionContextExecutor
 
 object ScriptWriter extends App with Service
-  with io.sudostream.api_event_horizon.scriptwriter.api.http.ProcessApiDefinition
-  with io.sudostream.api_event_horizon.scriptwriter.api.kafka.ProcessApiDefinition {
+  with ProcessApiDefinition
+  with kafka.ProcessApiDefinition {
 
   override val config = ConfigFactory.load()
   override implicit val system = ActorSystem("scriptwriter-system", config)

@@ -1,4 +1,4 @@
-package io.sudostream.api_event_horizon.scriptwriter.api.http
+package io.sudostream.api_antagonist.scriptwriter.api.http
 
 import java.io.{PrintWriter, StringWriter}
 
@@ -10,14 +10,14 @@ import akka.pattern.ask
 import akka.stream.Materializer
 import akka.stream.scaladsl.StreamConverters
 import akka.util.Timeout
-import io.sudostream.api_event_horizon.messages.SpeculativeScreenplay
-import io.sudostream.api_event_horizon.scriptwriter.business.ProcessSwaggerFileActor
+import io.sudostream.api_antagonist.messages.SpeculativeScreenplay
+import io.sudostream.api_antagonist.scriptwriter.business.ProcessSwaggerFileActor
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 trait ProcessApiDefinition extends Health
-  with io.sudostream.api_event_horizon.scriptwriter.api.kafka.ProcessApiDefinition {
+  with io.sudostream.api_antagonist.scriptwriter.api.kafka.ProcessApiDefinition {
 
   implicit def executor: ExecutionContextExecutor
 
