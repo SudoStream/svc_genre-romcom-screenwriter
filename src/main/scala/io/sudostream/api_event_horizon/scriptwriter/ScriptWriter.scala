@@ -6,7 +6,7 @@ import akka.http.scaladsl.Http
 import akka.kafka.{ConsumerSettings, ProducerSettings}
 import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.{Config, ConfigFactory}
-import io.sudostream.api_event_horizon.kafka.serialising.GeneratedTestsEventSerializer
+import io.sudostream.api_event_horizon.kafka.serialising.SpeculativeScreenPlaySerializer
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, StringDeserializer}
 
@@ -30,7 +30,7 @@ object ScriptWriter extends App with Service
     .withGroupId(config.getString("akka.kafka.consumer.groupid"))
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
 
-  override val producerSettings = ProducerSettings(system, new ByteArraySerializer, new GeneratedTestsEventSerializer)
+  override val producerSettings = ProducerSettings(system, new ByteArraySerializer, new SpeculativeScreenPlaySerializer)
     .withBootstrapServers(kafkaProducerBootServers)
 
   publishStuffToKafka()
