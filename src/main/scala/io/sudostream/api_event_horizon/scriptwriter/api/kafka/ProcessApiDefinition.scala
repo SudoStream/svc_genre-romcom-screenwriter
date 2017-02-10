@@ -10,7 +10,7 @@ import akka.kafka.{ConsumerSettings, ProducerMessage, ProducerSettings, Subscrip
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
 import io.sudostream.api_event_horizon.messages.SpeculativeScreenplay
-import io.sudostream.api_event_horizon.scram.api.SwaggerJsonScramConverter
+import io.sudostream.api_event_horizon.scram.api.{ScreenplayWriterAmateur, SwaggerJsonScreenplayWriterConverter}
 import org.apache.kafka.clients.producer.ProducerRecord
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
@@ -35,7 +35,8 @@ trait ProcessApiDefinition {
     Consumer.committableSource(consumerSettings, Subscriptions.topics("aeh-api-definitions"))
       .map {
         msg =>
-          val speculativeScreenplay = new SwaggerJsonScramConverter().convertToScram(msg.record.value()).get.generateHappyPathTests
+          val speculativeScreenplay = new SwaggerJsonScreenplayWriterConverter().
+            convertToScreenplayWriterAmateur(msg.record.value()).get.generateHappyPathTests
 
           val msgToCommit = ProducerMessage.Message(
             new ProducerRecord[Array[Byte], SpeculativeScreenplay]("speculative-screenplays", speculativeScreenplay),
