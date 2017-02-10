@@ -35,26 +35,26 @@ trait ProcessApiDefinition {
     Consumer.committableSource(consumerSettings, Subscriptions.topics("aeh-api-definitions"))
       .map {
         msg =>
-          val generatedTestsEvent = new SwaggerJsonScramConverter().convertToScram(msg.record.value()).get.generateHappyPathTests
+          val speculativeScreenplay = new SwaggerJsonScramConverter().convertToScram(msg.record.value()).get.generateHappyPathTests
 
           val msgToCommit = ProducerMessage.Message(
-            new ProducerRecord[Array[Byte], SpeculativeScreenplay]("speculative-screenplays", generatedTestsEvent),
+            new ProducerRecord[Array[Byte], SpeculativeScreenplay]("speculative-screenplays", speculativeScreenplay),
             msg.committableOffset)
-          println("generated tests: " + generatedTestsEvent)
+          println("Screenplay : " + speculativeScreenplay)
           msgToCommit
       }
       .runWith(Producer.commitableSink(producerSettings))
   }
 
-  def publishSingleEventToKafka(generatedTestsEvent: SpeculativeScreenplay): Future[Done] = {
+  def publishSingleEventToKafka(speculativeScreenplay: SpeculativeScreenplay): Future[Done] = {
 
-    val done = Source.single(generatedTestsEvent)
+    val done = Source.single(speculativeScreenplay)
       .map { msg =>
         new ProducerRecord[Array[Byte], SpeculativeScreenplay]("speculative-screenplays", msg)
       }
       .runWith(Producer.plainSink(producerSettings))
     logger.info("Message on its way to Kafka")
-    logger.debug("Message sent:- " + generatedTestsEvent)
+    logger.debug("Message sent:- " + speculativeScreenplay)
 
     done.onSuccess {
       case whoKnows => logger.info("All goood :" + whoKnows)
