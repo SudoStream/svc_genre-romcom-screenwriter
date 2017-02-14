@@ -1,4 +1,4 @@
-package io.sudostream.api_antagonist.scriptwriter
+package io.sudostream.api_antagonist.screenwriter.romcom
 
 import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
@@ -6,20 +6,19 @@ import akka.http.scaladsl.Http
 import akka.kafka.{ConsumerSettings, ProducerSettings}
 import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.{Config, ConfigFactory}
-import io.sudostream.api_antagonist.kafka.serialising.SpeculativeScreenplaySerializer
-import io.sudostream.api_antagonist.scriptwriter.api.http.ProcessApiDefinition
-import io.sudostream.api_antagonist.scriptwriter.api.kafka
+import io.sudostream.api_antagonist.kafka.serialising.{FinalScriptSerializer, GreenlitFilmDeserialiser}
+import io.sudostream.api_antagonist.screenwriter.romcom.api.http.ProcessApiDefinition
 import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer, StringDeserializer}
+import org.apache.kafka.common.serialization.{ByteArrayDeserializer, ByteArraySerializer}
 
 import scala.concurrent.ExecutionContextExecutor
 
-object ScriptWriter extends App with Service
+object RomcomScreenwriter extends App with Service
   with ProcessApiDefinition
-  with kafka.ProcessApiDefinition {
+  with io.sudostream.api_antagonist.screenwriter.romcom.api.kafka.ProcessApiDefinition {
 
   override val config = ConfigFactory.load()
-  override implicit val system = ActorSystem("scriptwriter-system", config)
+  override implicit val system = ActorSystem("screenwriter-system", config)
   override implicit val executor = system.dispatcher
   override implicit val materializer = ActorMaterializer()
   override val logger = Logging(system, getClass)
@@ -27,12 +26,12 @@ object ScriptWriter extends App with Service
   override val kafkaConsumerBootServers = config.getString("akka.kafka.consumer.bootstrapservers")
   override val kafkaProducerBootServers = config.getString("akka.kafka.producer.bootstrapservers")
 
-  override val consumerSettings = ConsumerSettings(system, new ByteArrayDeserializer, new StringDeserializer)
+  override val consumerSettings = ConsumerSettings(system, new ByteArrayDeserializer, new GreenlitFilmDeserialiser)
     .withBootstrapServers(kafkaConsumerBootServers)
     .withGroupId(config.getString("akka.kafka.consumer.groupid"))
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest")
 
-  override val producerSettings = ProducerSettings(system, new ByteArraySerializer, new SpeculativeScreenplaySerializer)
+  override val producerSettings = ProducerSettings(system, new ByteArraySerializer, new FinalScriptSerializer)
     .withBootstrapServers(kafkaProducerBootServers)
 
   publishStuffToKafka()

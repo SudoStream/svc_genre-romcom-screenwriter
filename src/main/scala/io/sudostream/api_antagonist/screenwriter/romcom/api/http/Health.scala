@@ -1,4 +1,4 @@
-package io.sudostream.api_antagonist.scriptwriter.api.http
+package io.sudostream.api_antagonist.screenwriter.romcom.api.http
 
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
