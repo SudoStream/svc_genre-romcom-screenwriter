@@ -39,7 +39,7 @@ trait ProcessApiDefinition {
             new ProducerRecord[Array[Byte], FinalScript]("final-script", finalScript),
             msg.committableOffset)
 
-          logger.debug("Final Script : " + finalScript)
+          println("Final Script : " + finalScript)
 
           msgToCommit
       }
