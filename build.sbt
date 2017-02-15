@@ -4,7 +4,7 @@ enablePlugins(DockerPlugin)
 
 name := "genre-romcom-screenwriter"
 organization := "io.sudostream.api-antagonist"
-version := "0.0.1-2"
+version := "0.0.2"
 scalaVersion := "2.11.8"
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
